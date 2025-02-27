@@ -13,7 +13,7 @@ class Database {
             port:21121,
             database: 'sgo', //a database de cada um de vocês possui a nomenclatura DB_(RA)
             user: 'avnadmin', // usuario e senha de cada um de vocês é o RA
-            password: 'AVNS_Hpt_OXZ5OHy6KCxOtpi',
+            password: ' ',
         });
     }
 
