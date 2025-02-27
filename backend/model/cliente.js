@@ -1,5 +1,5 @@
-const Database = require('../utils/database;js');
-const banco = Database();
+const Database = require('../utils/database.js');
+const banco = new Database();
 
 class clienteModel{
     #idCliente;
@@ -37,10 +37,26 @@ class clienteModel{
         let sql = "select * from cliente";
         let rows = await banco.ExecutaComando(sql);
         let lista = [];
-        for(let i = this.#obsCliente; i<rows.length; i++){
-            
+        for(let i = 0; i<rows.length; i++){
+            lista.push(new clienteModel(rows[i]['id_cliente'], rows[i]['nome_cliente'], rows[i]['telefone_cliente'], rows[i]['email_cliente'], rows[i]['observacao']));
+        }
+        return lista;
+    }
+
+    async gravar(){
+        if(this.#idCliente == 0){
+            let sql = "insert into cliente (nome_cliente, telefone_cliente, email_cliente, observacao) values (?,?,?,?)";
+            let valores = [this.#nomeCLiente, this.#telCliente, this.#emailCliente, this.#obsCliente, this.#idCliente];
+            let ok = await banco.ExecutaComando(sql, valores);
+            return ok;
+        }else{
+            let sql = "update cliente set nome_cliente = ?, telefone_cliente = ?, email_cliente = ?, observacao = ? where id_cliente = ?";
+            let valores = [this.#nomeCLiente, this.#telCliente, this.#emailCliente, this.#obsCliente];
+            let ok = await banco.ExecutaComando(sql, valores);
+            return ok;
         }
     }
+
 
 }
 

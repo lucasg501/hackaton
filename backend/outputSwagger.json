@@ -10,9 +10,212 @@
       "url": "http://localhost:4000/"
     }
   ],
-  "paths": {},
+  "paths": {
+    "/clientes/listar": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Lista todos os clientes",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/clientes/gravar": {
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Cria um novo cliente",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/cliente"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/corretor/listar": {
+      "get": {
+        "tags": [
+          "Corretor"
+        ],
+        "summary": "Lista todos os corretores",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/imovel/listar": {
+      "get": {
+        "tags": [
+          "Imovel"
+        ],
+        "summary": "Lista os imóveis",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/configMod/obter/{idCorretor}": {
+      "get": {
+        "tags": [
+          "Configurações"
+        ],
+        "summary": "Lista as configurações de um corretor",
+        "description": "",
+        "parameters": [
+          {
+            "name": "idCorretor",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/configMod/gravar": {
+      "post": {
+        "tags": [
+          "Configurações"
+        ],
+        "summary": "Grava as configurações",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/config"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/configMod/alterar": {
+      "post": {
+        "tags": [
+          "Configurações"
+        ],
+        "summary": "Altera as configurações",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/config"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "components": {
-    "schemas": {},
+    "schemas": {
+      "cliente": {
+        "type": "object",
+        "properties": {
+          "idCliente": {
+            "type": "number",
+            "example": 0
+          },
+          "nomeCliente": {
+            "type": "string",
+            "example": "Roberval"
+          },
+          "telCliente": {
+            "type": "string",
+            "example": "18996670055"
+          },
+          "emailCliente": {
+            "type": "string",
+            "example": "robervalgatao@gmail.com"
+          },
+          "obsCliente": {
+            "type": "string",
+            "example": "n/a"
+          }
+        }
+      },
+      "corretor": {
+        "type": "object",
+        "properties": {
+          "idCorretor": {
+            "type": "number",
+            "example": 0
+          },
+          "nomeCorretor": {
+            "type": "string",
+            "example": "Cabecinha de guidão"
+          }
+        }
+      },
+      "config": {
+        "type": "object",
+        "properties": {
+          "idConfig": {
+            "type": "number",
+            "example": 0
+          },
+          "ativo": {
+            "type": "string",
+            "example": "S"
+          },
+          "modo": {
+            "type": "string",
+            "example": "A"
+          },
+          "idCorretor": {
+            "type": "number",
+            "example": 13
+          },
+          "idDispo": {
+            "type": "number",
+            "example": 0
+          }
+        }
+      }
+    },
     "securitySchemes": {
       "apiKeyAuth": {
         "type": "apiKey",

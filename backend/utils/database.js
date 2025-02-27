@@ -9,11 +9,11 @@ class Database {
     constructor() {
 
         this.#conexao = mysql.createPool({
-            // host: 'mydb-sgo-lucasgtg11.b.aivencloud.com', //endereço do nosso banco de dados na nuvem
-            // port:21121,
-            // database: 'sgo', //a database de cada um de vocês possui a nomenclatura DB_(RA)
-            // user: 'avnadmin', // usuario e senha de cada um de vocês é o RA
-            // password: ' ',
+            host: '127.0.0.1', //endereço do nosso banco de dados na nuvem
+            port: 3306,
+            database: 'hackatoon', //a database de cada um de vocês possui a nomenclatura DB_(RA)
+            user: 'root', // usuario e senha de cada um de vocês é o RA
+            password: 'ametis99',
         });
     }
 
