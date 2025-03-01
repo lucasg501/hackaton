@@ -5,6 +5,7 @@ const clientes = require('./route/clienteRoute.js');
 const corretor = require('./route/corretorRoute.js');
 const imovel = require('./route/imovelRoute.js');
 const configMod = require('./route/configModRoute.js');
+const disponibilidade = require('./route/disponibilidadeRoute.js');
 
 const cors = require('cors');
 
@@ -13,11 +14,12 @@ const porta = "4000";
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 app.use(express.json());
-app.use(cors({origin: "http://localhost:3000", credentials:true}));
+app.use(cors({origin: "http://localhost:4000", credentials:true}));
 app.use('/clientes', clientes);
 app.use('/corretor', corretor);
 app.use('/imovel', imovel);
 app.use('/configMod', configMod);
+app.use('/disponiblidade', disponibilidade);
 
 app.listen(porta,()=>{
     console.log(`Servidor rodando em http://localhost:${porta}\n`);

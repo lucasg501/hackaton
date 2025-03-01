@@ -2,6 +2,7 @@ const swaggerAutogen = require("swagger-autogen")({openapi: "3.0.0"});
 const clienteModel = require('./model/cliente.js');
 const corretorModel = require('./model/corretor.js');
 const configModel = require('./model/configMod.js');
+const dispoModel = require('./model/disponibilidadeModel.js');
 
 
 const doc = {
@@ -21,7 +22,8 @@ const doc = {
         schemas:{
             cliente: new clienteModel(0, 'Roberval', '18996670055', 'robervalgatao@gmail.com','n/a').toJSON(),
             corretor: new corretorModel(0, 'Cabecinha de guidão').toJSON(),
-            config: new configModel(0, 'S', 'A', 13, 0).toJSON()
+            config: new configModel(0, 'S', 'A', 13, 0).toJSON(),
+            disponibilidade: new dispoModel(0, 'Segunda', '08:00', 1, 'S').toJSON()
         }
     }
 }

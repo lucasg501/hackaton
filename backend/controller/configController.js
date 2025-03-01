@@ -1,4 +1,3 @@
-const { config } = require('process');
 const ConfigModel = require('../model/configMod.js');
 
 class configController{

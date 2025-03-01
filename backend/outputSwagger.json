@@ -148,6 +148,116 @@
           }
         }
       }
+    },
+    "/disponiblidade/listar": {
+      "get": {
+        "tags": [
+          "Disponibilidade"
+        ],
+        "summary": "Lista as disponibilidades",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/disponiblidade/obter/{idCorretor}": {
+      "get": {
+        "tags": [
+          "Disponibilidade"
+        ],
+        "summary": "Obtem uma disponibilidade",
+        "description": "",
+        "parameters": [
+          {
+            "name": "idCorretor",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/disponiblidade/gravar": {
+      "post": {
+        "tags": [
+          "Disponibilidade"
+        ],
+        "summary": "Grava uma nova disponibilidade",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/disponibilidade"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/disponiblidade/alterar": {
+      "put": {
+        "tags": [
+          "Disponibilidade"
+        ],
+        "summary": "Altera uma disponibilidade",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/disponibilidade"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/disponiblidade/excluir/{idDispo}": {
+      "delete": {
+        "tags": [
+          "Disponibilidade"
+        ],
+        "summary": "Exclui uma disponibilidade",
+        "description": "",
+        "parameters": [
+          {
+            "name": "idDispo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
@@ -212,6 +322,31 @@
           "idDispo": {
             "type": "number",
             "example": 0
+          }
+        }
+      },
+      "disponibilidade": {
+        "type": "object",
+        "properties": {
+          "idDispo": {
+            "type": "number",
+            "example": 0
+          },
+          "diaSemana": {
+            "type": "string",
+            "example": "Segunda"
+          },
+          "hora": {
+            "type": "string",
+            "example": "08:00"
+          },
+          "idCorretor": {
+            "type": "number",
+            "example": 1
+          },
+          "ocupado": {
+            "type": "string",
+            "example": "S"
           }
         }
       }
