@@ -6,6 +6,7 @@ const corretor = require('./route/corretorRoute.js');
 const imovel = require('./route/imovelRoute.js');
 const configMod = require('./route/configModRoute.js');
 const disponibilidade = require('./route/disponibilidadeRoute.js');
+const agendamento = require('./route/agendamentoRoute.js');
 
 const cors = require('cors');
 
@@ -20,6 +21,7 @@ app.use('/corretor', corretor);
 app.use('/imovel', imovel);
 app.use('/configMod', configMod);
 app.use('/disponiblidade', disponibilidade);
+app.use('/agendamento', agendamento);
 
 app.listen(porta,()=>{
     console.log(`Servidor rodando em http://localhost:${porta}\n`);

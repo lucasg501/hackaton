@@ -57,7 +57,6 @@ class clienteModel{
         }
     }
 
-
 }
 
 module.exports = clienteModel;

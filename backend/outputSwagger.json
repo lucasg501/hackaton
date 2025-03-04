@@ -258,6 +258,116 @@
           }
         }
       }
+    },
+    "/agendamento/listar": {
+      "get": {
+        "tags": [
+          "Agendamentos"
+        ],
+        "summary": "Lista todos os agendamentos",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/agendamento/obter/{idAgendamento}": {
+      "get": {
+        "tags": [
+          "Agendamentos"
+        ],
+        "summary": "Obtem um agendamento",
+        "description": "",
+        "parameters": [
+          {
+            "name": "idAgendamento",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/agendamento/gravar": {
+      "post": {
+        "tags": [
+          "Agendamentos"
+        ],
+        "summary": "Grava um novo agendamento",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/agendamento"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agendamento/alterar": {
+      "put": {
+        "tags": [
+          "Agendamentos"
+        ],
+        "summary": "Altera um agendamento",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/agendamento"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agendamento/excluir/{idAgendamento}": {
+      "delete": {
+        "tags": [
+          "Agendamentos"
+        ],
+        "summary": "Exclui um agendamento",
+        "description": "",
+        "parameters": [
+          {
+            "name": "idAgendamento",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
@@ -345,6 +455,35 @@
             "example": 1
           },
           "ocupado": {
+            "type": "string",
+            "example": "S"
+          }
+        }
+      },
+      "agendamento": {
+        "type": "object",
+        "properties": {
+          "idAgendamento": {
+            "type": "number",
+            "example": 0
+          },
+          "idCli": {
+            "type": "number",
+            "example": 0
+          },
+          "idCorretor": {
+            "type": "number",
+            "example": 0
+          },
+          "idImovel": {
+            "type": "number",
+            "example": 0
+          },
+          "DtHr": {
+            "type": "string",
+            "example": "2021-01-01 00:00:00"
+          },
+          "aceito": {
             "type": "string",
             "example": "S"
           }
