@@ -28,10 +28,6 @@ class AgendamentoController{
             let agendamentoModel = new AgendamentoModel();
 
             agendamentoModel.idAgendamento = req.body.idAgendamento;
-            agendamentoModel.idCli = req.body.idCli;
-            agendamentoModel.idCorretor = req.body.idCorretor;
-            agendamentoModel.idImovel = req.body.idImovel;
-            agendamentoModel.DtHr = req.body.DtHr;
             agendamentoModel.aceito = req.body.aceito;
             let ok = await agendamentoModel.gravar();
             if(ok){

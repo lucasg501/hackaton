@@ -15,7 +15,7 @@ const porta = "4000";
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 app.use(express.json());
-app.use(cors({origin: "http://localhost:4000", credentials:true}));
+app.use(cors({origin: "http://localhost:3000", credentials:true}));
 app.use('/clientes', clientes);
 app.use('/corretor', corretor);
 app.use('/imovel', imovel);

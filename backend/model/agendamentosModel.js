@@ -43,8 +43,8 @@ class AgendamentosModel{
             let ok = await banco.ExecutaComandoNonQuery(sql,valores);
             return ok;
         }else{
-            let sql = "UPDATE agendamentos SET id_cliente = ?, id_corretor = ?, id_imovel = ?, data_hora_agendamento = ?, aceito = ? WHERE id_agendamento = ?";
-            let valores = [this.#idCli, this.#idCorretor, this.#idImovel, this.#DtHr, this.#aceito, this.#idAgendamento];
+            let sql = "UPDATE agendamentos SET aceito = ? WHERE id_agendamento = ?";
+            let valores = [this.#aceito, this.#idAgendamento];
             let ok = await banco.ExecutaComandoNonQuery(sql, valores);
             return ok;
         }
