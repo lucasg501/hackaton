@@ -149,7 +149,7 @@
         }
       }
     },
-    "/disponiblidade/listar": {
+    "/disponibilidade/listar": {
       "get": {
         "tags": [
           "Disponibilidade"
@@ -163,7 +163,7 @@
         }
       }
     },
-    "/disponiblidade/obter/{idCorretor}": {
+    "/disponibilidade/obter/{idCorretor}": {
       "get": {
         "tags": [
           "Disponibilidade"
@@ -187,7 +187,7 @@
         }
       }
     },
-    "/disponiblidade/gravar": {
+    "/disponibilidade/gravar": {
       "post": {
         "tags": [
           "Disponibilidade"
@@ -211,7 +211,7 @@
         }
       }
     },
-    "/disponiblidade/alterar": {
+    "/disponibilidade/alterar": {
       "put": {
         "tags": [
           "Disponibilidade"
@@ -235,7 +235,7 @@
         }
       }
     },
-    "/disponiblidade/excluir/{idDispo}": {
+    "/disponibilidade/excluir/{idDispo}": {
       "delete": {
         "tags": [
           "Disponibilidade"

@@ -19,11 +19,11 @@ class clienteController{
         if(Object.keys(req.body).length > 0){
             let clienteModel = new ClienteModel();
 
-            clienteModel.idCliente = req.body.idCliente;
-            clienteModel.nomeCliente = req.body.nomeCliente;
-            clienteModel.telCliente = req.body.telCliente;
-            clienteModel.emailCliente = req.body.emailCliente;
-            clienteModel.obsCliente = req.body.obsCliente;
+            clienteModel.idCliente = 0;
+            clienteModel.nomeCliente = req.body.nome;
+            clienteModel.telCliente = req.body.tel;
+            clienteModel.emailCliente = req.body.email;
+            clienteModel.obsCliente = req.body.obs;
             let ok = await clienteModel.gravar();
             if(ok){
                 res.status(200).json({msg:"Cliente gravado com sucesso"});

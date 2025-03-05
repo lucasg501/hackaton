@@ -46,12 +46,12 @@ class clienteModel{
     async gravar(){
         if(this.#idCliente == 0){
             let sql = "insert into cliente (nome_cliente, telefone_cliente, email_cliente, observacao) values (?,?,?,?)";
-            let valores = [this.#nomeCLiente, this.#telCliente, this.#emailCliente, this.#obsCliente, this.#idCliente];
+            let valores = [this.#nomeCLiente, this.#telCliente, this.#emailCliente, this.#obsCliente];
             let ok = await banco.ExecutaComando(sql, valores);
             return ok;
         }else{
             let sql = "update cliente set nome_cliente = ?, telefone_cliente = ?, email_cliente = ?, observacao = ? where id_cliente = ?";
-            let valores = [this.#nomeCLiente, this.#telCliente, this.#emailCliente, this.#obsCliente];
+            let valores = [this.#nomeCLiente, this.#telCliente, this.#emailCliente, this.#obsCliente, this.#idCliente];
             let ok = await banco.ExecutaComando(sql, valores);
             return ok;
         }

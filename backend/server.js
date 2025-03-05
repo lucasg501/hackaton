@@ -20,7 +20,7 @@ app.use('/clientes', clientes);
 app.use('/corretor', corretor);
 app.use('/imovel', imovel);
 app.use('/configMod', configMod);
-app.use('/disponiblidade', disponibilidade);
+app.use('/disponibilidade', disponibilidade);
 app.use('/agendamento', agendamento);
 
 app.listen(porta,()=>{

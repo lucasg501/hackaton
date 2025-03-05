@@ -8,10 +8,10 @@ class AgendamentoController{
 
             agendamentoModel.idAgendamento = 0;
             agendamentoModel.idCli = req.body.idCli;
-            agendamentoModel.idCorretor = req.body.idCorretor;
-            agendamentoModel.idImovel = req.body.idImovel;
-            agendamentoModel.DtHr = req.body.DtHr;
-            agendamentoModel.aceito = req.body.aceito;
+            agendamentoModel.idCorretor = 13;
+            agendamentoModel.idImovel = 2;
+            agendamentoModel.DtHr = req.body.horaAgendamento+req.body.diaAgendamento;
+            agendamentoModel.aceito = 'S';
             let ok = await agendamentoModel.gravar();
             if(ok){
                 res.status(200).json({msg:'Agendamento gravado com sucesso'});
