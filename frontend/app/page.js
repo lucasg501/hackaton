@@ -96,10 +96,6 @@ export default function Home({ children }) {
         setSelectedSchedule(null);  // Limpa o horário selecionado
     };
 
-    useEffect(() => {
-        listarDisponibilidade();
-    }, []);
-
     return (
         <div style={{ marginTop: 50 }}>
             <header className="bg-dark py-5">

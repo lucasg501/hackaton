@@ -8,20 +8,17 @@ class configMod{
     #ativo;
     #modo;
     #idCorretor;
-    #idDispo;
 
     get idConfig(){return this.#idConfig;} set idConfig(idConfig){this.#idConfig = idConfig;}
     get ativo(){return this.#ativo;} set ativo(ativo){this.#ativo = ativo;}
     get modo(){return this.#modo;} set modo(modo){this.#modo = modo;}
     get idCorretor(){return this.#idCorretor;} set idCorretor(idCorretor){this.#idCorretor = idCorretor;}
-    get idDispo(){return this.#idDispo;} set idDispo(idDispo){this.#idDispo = idDispo;}
 
-    constructor(idConfig, ativo, modo, idCorretor, idDispo) {
+    constructor(idConfig, ativo, modo, idCorretor) {
         this.#idConfig = idConfig;
         this.#ativo = ativo;
         this.#modo = modo;    
         this.#idCorretor = idCorretor;
-        this.#idDispo = idDispo;
     }   
 
     toJSON(){
@@ -29,8 +26,7 @@ class configMod{
             'idConfig': this.#idConfig,
             'ativo': this.#ativo,
             'modo': this.#modo,
-            'idCorretor': this.#idCorretor,
-            'idDispo': this.#idDispo
+            'idCorretor': this.#idCorretor
         }
     }
 
@@ -39,7 +35,7 @@ class configMod{
         let valores = [idCorretor];
         let rows = await banco.ExecutaComando(sql, valores);
         if(rows.length > 0){
-            let config = new configMod(rows[0]['id_configuracao'], rows[0]['ativo'], rows[0]['modo'], rows[0]['id_corretor'], rows[0]['id_disponibilidade']);
+            let config = new configMod(rows[0]['id_configuracao'], rows[0]['ativo'], rows[0]['modo'], rows[0]['id_corretor']);
             return config;
         }
         return null;
@@ -47,13 +43,13 @@ class configMod{
 
     async gravar(){
         if(this.#idConfig == 0){
-            let sql = "insert into configuracao (ativo, modo, id_corretor, id_disponibilidade) values (?,?,?,?)";
-            let valores = [this.#ativo, this.#modo, this.#idCorretor, this.#idDispo];
+            let sql = "insert into configuracao (ativo, modo, id_corretor) values (?,?,?)";
+            let valores = [this.#ativo, this.#modo, this.#idCorretor];
             let ok = await banco.ExecutaComando(sql, valores);
             return ok;
         }else{
-            let sql = "update configuracao set ativo = ?, modo = ?, id_corretor = ?, id_disponibilidade = ? where id_configuracao = ?";
-            let valores = [this.#ativo, this.#modo, this.#idCorretor, this.#idDispo, this.#idConfig];
+            let sql = "update configuracao set ativo = ?, modo = ?, id_corretor = ? where id_configuracao = ?";
+            let valores = [this.#ativo, this.#modo, this.#idCorretor, this.#idConfig];
             let ok = await banco.ExecutaComando(sql, valores);
             return ok;
         }

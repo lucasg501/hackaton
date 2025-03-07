@@ -428,10 +428,6 @@
           "idCorretor": {
             "type": "number",
             "example": 13
-          },
-          "idDispo": {
-            "type": "number",
-            "example": 0
           }
         }
       },

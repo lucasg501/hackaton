@@ -55,7 +55,7 @@ export default function SetConfiguracao() {
   const cadastrarDisponibilidade = () => {
     const diaTotal = [];
 
-    if (statusAtivo === 'sim') {
+    if (statusAtivo === '0') {
       Object.keys(disponibilidade).forEach((dia) => {
         const horasSelecionadas = [];
 
@@ -95,6 +95,27 @@ export default function SetConfiguracao() {
     }
   };
 
+  function cadastrarConfig() {
+    let status = 0;
+    httpClient.post("/configMod/gravar", {
+      statusAtivo: statusAtivo,
+      modo: modo,
+      idCorretor: 13
+    })
+      .then(r => {
+        status = r.status;
+        if (status === 200) {
+          alert("Configuracao criada com sucesso!");
+        } else {
+          alert("Erro ao criar a configuracao.");
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao criar configuracao:', error);
+        alert("Ocorreu um erro ao tentar criar a configuracao.");
+      });
+  }
+
   return (
     <div className="container py-5 d-flex align-items-center" style={{ minHeight: '100vh' }}>
       <div className="w-100 form-control" style={{ maxWidth: '600px', margin: '0 auto', padding: 20 }}>
@@ -107,15 +128,15 @@ export default function SetConfiguracao() {
             <div>
               <button
                 type="button"
-                className={`btn ${statusAtivo === 'sim' ? 'btn-primary' : 'btn-outline-primary'} me-2`}
-                onClick={() => setStatusAtivo('sim')}
+                className={`btn ${statusAtivo === '0' ? 'btn-primary' : 'btn-outline-primary'} me-2`}
+                onClick={() => setStatusAtivo('0')}
               >
                 Sim
               </button>
               <button
                 type="button"
-                className={`btn ${statusAtivo === 'nao' ? 'btn-danger' : 'btn-outline-danger'}`}
-                onClick={() => setStatusAtivo('nao')}
+                className={`btn ${statusAtivo === '1' ? 'btn-danger' : 'btn-outline-danger'}`}
+                onClick={() => setStatusAtivo('1')}
               >
                 Não
               </button>
@@ -128,15 +149,15 @@ export default function SetConfiguracao() {
             <div>
               <button
                 type="button"
-                className={`btn ${modo === 'automatico' ? 'btn-primary' : 'btn-outline-primary'} me-2`}
-                onClick={() => setModo('automatico')}
+                className={`btn ${modo === '1' ? 'btn-primary' : 'btn-outline-primary'} me-2`}
+                onClick={() => setModo('1')}
               >
                 Automático
               </button>
               <button
                 type="button"
-                className={`btn ${modo === 'manual' ? 'btn-secondary' : 'btn-outline-secondary'}`}
-                onClick={() => setModo('manual')}
+                className={`btn ${modo === '0' ? 'btn-secondary' : 'btn-outline-secondary'}`}
+                onClick={() => setModo('0')}
               >
                 Manual
               </button>
@@ -175,7 +196,13 @@ export default function SetConfiguracao() {
             style={{ width: '70%', display: 'flex', justifyContent: 'center', margin: '0 auto' }}
             type="button"
             className="btn btn-success"
-            onClick={cadastrarDisponibilidade}
+            onClick={() => {
+              cadastrarConfig();
+              setTimeout(() => {
+                cadastrarDisponibilidade();
+              }, 2000); // 2000ms = 2 segundos de delay
+            }}
+
           >
             Salvar
           </button>

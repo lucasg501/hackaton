@@ -7,10 +7,9 @@ class configController{
             let configModel = new ConfigModel();
             
             configModel.idConfig = 0;
-            configModel.ativo = req.body.ativo;
+            configModel.ativo = req.body.statusAtivo;
             configModel.modo = req.body.modo;
             configModel.idCorretor = req.body.idCorretor;
-            configModel.idDispo = req.body.idDispo;
             let ok = await configModel.gravar();
             if(ok){
                 res.status(200).json({msg:"Configurações gravadas com sucesso"});
