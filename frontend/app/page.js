@@ -5,79 +5,163 @@ import httpClient from '@/app/utils/httpClient';  // Supondo que você tenha um 
 export default function Home({ children }) {
 
     const [listaDisponibilidade, setListaDisponibilidade] = useState([]);
-    const [showModal, setShowModal] = useState(false);  // Estado para controlar o modal de disponibilidades
-    const [showFormModal, setShowFormModal] = useState(false);  // Estado para controlar o modal do formulário
-    const [selectedSchedule, setSelectedSchedule] = useState(null);  // Armazena o horário selecionado para agendamento
+    const [showModal, setShowModal] = useState(false);
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [selectedSchedule, setSelectedSchedule] = useState(null);
+    const [agendamentoEfetuado, setAgendamentoEfetuado] = useState(false); // Novo estado
+
 
     const nomeCliente = useRef('');
     const telCliente = useRef('');
     const emailCliente = useRef('');
     const obsCliente = useRef('');
-    const diaAgendamento = useRef('');
-    const horaAgendamento = useRef('');
 
+    // Função para calcular as datas da semana com base na resposta da API
+  // Função para calcular as datas da semana com base nas disponibilidades
+function calcularDatasSemana(disponibilidades) {
+    const hoje = new Date();  // Data atual
+    const diaDaSemana = hoje.getDay();  // Dia da semana (0 a 6, sendo 0 = Domingo)
 
-    function criarCliente(){
-        let status = 0;
-        httpClient.post("/clientes/gravar", {
-            nome: nomeCliente.current.value,
-            tel: telCliente.current.value,
-            email: emailCliente.current.value,
-            obs: obsCliente.current.value
-        })
-            .then(r => {
-                status = r.status;
-                if (status === 200) {
-                    alert("Cliente criado com sucesso!");
-                    agendarHorario();
-                } else {
-                    alert("Erro ao criar o cliente.");
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao criar cliente:', error);
-                alert("Ocorreu um erro ao tentar criar o cliente.");
+    // Determinar a quantidade de dias para voltar até a segunda-feira
+    const diasParaSegunda = (diaDaSemana === 0 ? 6 : diaDaSemana - 1);  // Se for domingo (0), volta 6 dias, caso contrário, volta até o dia da segunda-feira
+
+    // Calculando a data de segunda-feira da semana atual
+    const segundaFeira = new Date(hoje);
+    segundaFeira.setDate(hoje.getDate() - diasParaSegunda);
+
+    // Mapear os dias da semana que vieram da API (em minúsculas)
+    const diasSemanaApi = disponibilidades.map(dia => dia.diaSemana.toLowerCase());  // Exemplo: "segunda", "terça", "quarta", etc.
+
+    // Mapeia os dias da API para suas datas corretas
+    let datasCorrespondentes = diasSemanaApi.map(dia => {
+        const dataDia = new Date(segundaFeira);  // Copiar a data da segunda-feira
+        const diasDaSemana = { "segunda": 0, "terca": 1, "quarta": 2, "quinta": 3, "sexta": 4, "sabado": 5, "domingo": 6 }; // Mapeamento de dias da semana
+        const offsetDia = diasDaSemana[dia];  // Obter o número do dia da semana (0 = segunda, 1 = terça, etc.)
+
+        // Ajustar a data para o dia da semana correto
+        dataDia.setDate(segundaFeira.getDate() + offsetDia);
+
+        return {
+            diaSemana: dia,
+            data: dataDia.toLocaleDateString()  // Formato local da data
+        };
+    });
+
+    return datasCorrespondentes;
+}
+
+// Função para listar as disponibilidades
+function listarDisponibilidade() {
+    httpClient.get("/disponibilidade/listar")
+        .then(r => r.json())
+        .then(r => {
+            // Calcular as datas correspondentes aos dias da semana
+            const disponibilidadesComDatas = calcularDatasSemana(r);
+
+            // Agora, associamos as informações da API com as datas calculadas
+            const disponibilidadesCompletas = r.map((dispo, index) => {
+                return {
+                    ...dispo, // Mantém todas as propriedades da API
+                    data: disponibilidadesComDatas[index]?.data || 'Data não disponível', // Adiciona a data calculada
+                };
             });
-    }
 
-    function agendarHorario(e) {
-        e.preventDefault();  // Previne o comportamento padrão de envio do formulário
-        let status = 0;
-        // Chamada para a API de agendamento
-        httpClient.post("/agendamento/gravar", {
-            diaAgendamento: selectedSchedule.dia,  // Atribuindo o valor de dia do selectedSchedule
-            horaAgendamento: selectedSchedule.hora, // Atribuindo o valor de hora do selectedSchedule
-            nomeCliente: nomeCliente.current.value,
-            telCliente: telCliente.current.value,
-            emailCliente: emailCliente.current.value,
-            obsCliente: obsCliente.current.value
+            setListaDisponibilidade(disponibilidadesCompletas); // Atualiza o estado com as disponibilidades e datas
+            setShowModal(true);  // Abre o modal de disponibilidades
         })
-            .then(r => {
-                status = r.status;
-                if (status === 200) {
-                    alert("Agendamento realizado com sucesso!");
-                    fecharFormModal();  // Fecha o modal após o sucesso
-                } else {
-                    alert("Erro ao realizar o agendamento.");
+        .catch(error => console.error('Erro ao listar disponibilidade:', error));
+}
+
+// Função para cadastrar o agendamento
+function cadastrarAgendamento() {
+    let status = 0;
+
+    httpClient.post('/clientes/gravar', {
+        nome: nomeCliente.current.value,
+        tel: telCliente.current.value,
+        email: emailCliente.current.value,
+        obs: obsCliente.current.value
+    })
+        .then(r => {
+            status = r.status;
+            return r.json();
+        })
+        .then(r => {
+            if (status === 200) {
+                // Pegando o id_cliente retornado da criação do cliente
+                const id_cliente = r.id_cliente;
+
+                // Função para formatar o dia e hora para o formato DATETIME do banco (yyyy-mm-dd hh:mm:ss)
+                function formatarDataHora(diaSemana, hora) {
+                    const diasSemana = {
+                        "segunda": 0,
+                        "terca": 1,
+                        "quarta": 2,
+                        "quinta": 3,
+                        "sexta": 4,
+                        "sabado": 5,
+                        "domingo": 6
+                    };
+
+                    // Cria a data base como sendo hoje
+                    const hoje = new Date();
+                    const diaDaSemana = hoje.getDay(); // Pega o dia atual (0=domingo, 1=segunda...)
+
+                    // Calcula a quantidade de dias até o próximo dia da semana
+                    const diasAteData = diasSemana[diaSemana.toLowerCase()] - diaDaSemana;
+
+                    // Cria a data para o agendamento
+                    const dataAgendamento = new Date(hoje);
+                    dataAgendamento.setDate(hoje.getDate() + diasAteData + 1);
+
+                    // Formatar a data no formato yyyy-mm-dd
+                    const ano = dataAgendamento.getFullYear();
+                    const mes = String(dataAgendamento.getMonth() + 1).padStart(2, '0');
+                    const dia = String(dataAgendamento.getDate()).padStart(2, '0');
+
+                    // Criar a data completa com a hora (hora passada como argumento)
+                    const dataFormatada = `${ano}-${mes}-${dia} ${hora}:00`; // Hora no formato de 24 horas (ex: "08:00:00")
+
+                    return dataFormatada;
                 }
-            })
-            .catch(error => {
-                console.error('Erro ao agendar horário:', error);
-                alert("Ocorreu um erro ao tentar agendar.");
-            });
-    }
+
+                // Formatar a data e hora do agendamento
+                const dataHoraAgendada = formatarDataHora(selectedSchedule.dia, selectedSchedule.hora);
+
+                // Realizando o cadastro do agendamento
+                httpClient.post('/agendamento/gravar', {
+                    idCli: id_cliente,  // Passa o id_cliente para o agendamento
+                    idCorretor: 5,     // Exemplo de id do corretor
+                    idImovel: 1,        // Exemplo de id do imóvel
+                    DtHr: dataHoraAgendada,  // Data e hora do agendamento no formato DATETIME
+                })
+                    .then(agendamentoResponse => {
+                        if (agendamentoResponse.status === 200) {
+                            setAgendamentoEfetuado(true); // Marca que o agendamento foi efetuado
+                            //alert("Agendamento cadastrado com sucesso!");
+                            httpClient.get("/disponibilidade/agendada",{
+                                agendado: 'S'
+                                .then(r=>{
+                                    alert("Agendamento cadastrado com sucesso!");
+                                })
+                            })
+                        } else {
+                            alert("Erro ao cadastrar o agendamento.");
+                        }
+                    })
+                    .catch(error => {
+                        alert("Erro ao cadastrar o agendamento. Detalhes: " + error);
+                    });
+            } else {
+                alert("Erro ao cadastrar o cliente.");
+            }
+        })
+        .catch(error => {
+            alert("Erro ao cadastrar o cliente. Detalhes: " + error);
+        });
+}
 
 
-    // Função para listar as disponibilidades
-    function listarDisponibilidade() {
-        httpClient.get("/disponibilidade/listar")
-            .then(r => r.json())
-            .then(r => {
-                setListaDisponibilidade(r);
-                setShowModal(true);  // Abre o modal de disponibilidades ao receber a lista
-            })
-            .catch(error => console.error('Erro ao listar disponibilidade:', error));
-    }
 
     // Função para fechar o modal de disponibilidades
     const fecharModal = () => {
@@ -137,22 +221,41 @@ export default function Home({ children }) {
                                     <thead>
                                         <tr>
                                             <th>Dia</th>
+                                            <th>Data</th>
                                             <th>Horário</th>
                                             <th>Agendar</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         {listaDisponibilidade.map((value, index) => (
                                             <tr key={index}>
                                                 <td>{value.diaSemana}</td>
+                                                <td>{value.data}</td>
                                                 <td>{value.hora}</td>
-                                                <td><button
-                                                    type="button"
-                                                    className="btn btn-primary"
-                                                    onClick={() => abrirFormModal(value.diaSemana, value.hora)}>
-                                                    Agendar
-                                                </button></td>
+                                                {listaDisponibilidade[index].agendado === 'S' ? (
+                                                    <td>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-primary"
+                                                        onClick={() => abrirFormModal(value.diaSemana, value.hora)}
+                                                        disabled={agendamentoEfetuado} // Desabilita o botão caso o agendamento tenha sido efetuado
+                                                    >
+                                                        Agendar
+                                                    </button>
+                                                </td>
+                                                ) : (
+                                                    <td>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-primary"
+                                                        onClick={() => abrirFormModal(value.diaSemana, value.hora)}
+                                                        disabled={agendamentoEfetuado} // Desabilita o botão caso o agendamento tenha sido efetuado
+                                                    >
+                                                        Agendar
+                                                    </button>
+                                                </td>
+                                                )}
+
                                             </tr>
                                         ))}
                                     </tbody>
@@ -193,7 +296,7 @@ export default function Home({ children }) {
                                         <label htmlFor="observacao" className="form-label">Observação</label>
                                         <textarea ref={obsCliente} className="form-control" id="observacao" placeholder="Observações" />
                                     </div>
-                                    <button type="submit" className="btn btn-primary" onClick={criarCliente}>Confirmar Agendamento</button>
+                                    <button type="submit" className="btn btn-primary" onClick={cadastrarAgendamento}>Confirmar Agendamento</button>
                                 </form>
                             </div>
                             <div className="modal-footer">

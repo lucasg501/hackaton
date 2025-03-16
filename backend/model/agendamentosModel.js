@@ -8,6 +8,7 @@ class AgendamentosModel{
     #idImovel;
     #DtHr;
     #aceito;
+    #agendado;
 
     get idAgendamento(){return this.#idAgendamento;} set idAgendamento(idAgendamento){this.#idAgendamento = idAgendamento;}
     get idCli(){return this.#idCli;} set idCli(idCli){this.#idCli = idCli;}

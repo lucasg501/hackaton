@@ -77,6 +77,9 @@ class DisponibilidadeModel {
     let ok = await banco.ExecutaComando(sql, valores);
     return ok;
 }
+
+
+
 }
 
 module.exports = DisponibilidadeModel;

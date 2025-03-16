@@ -43,19 +43,30 @@ class clienteModel{
         return lista;
     }
 
-    async gravar(){
-        if(this.#idCliente == 0){
+    async gravar() {
+        if(this.#idCliente == 0) {
+            // Inserção de um novo cliente
             let sql = "insert into cliente (nome_cliente, telefone_cliente, email_cliente, observacao) values (?,?,?,?)";
             let valores = [this.#nomeCLiente, this.#telCliente, this.#emailCliente, this.#obsCliente];
             let ok = await banco.ExecutaComando(sql, valores);
+    
+            // Retorna o id_cliente gerado pelo banco de dados
+            if (ok) {
+                // Supondo que o banco de dados suporte a operação LAST_INSERT_ID() para retornar o id gerado
+                let idClienteSql = "SELECT LAST_INSERT_ID() as id_cliente";
+                let resultado = await banco.ExecutaComando(idClienteSql);
+                return resultado[0].id_cliente; // Retorna o id_cliente gerado
+            }
             return ok;
-        }else{
+        } else {
+            // Atualização de um cliente existente
             let sql = "update cliente set nome_cliente = ?, telefone_cliente = ?, email_cliente = ?, observacao = ? where id_cliente = ?";
             let valores = [this.#nomeCLiente, this.#telCliente, this.#emailCliente, this.#obsCliente, this.#idCliente];
             let ok = await banco.ExecutaComando(sql, valores);
             return ok;
         }
     }
+    
 
 }
 
