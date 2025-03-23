@@ -51,7 +51,61 @@ export default function Formulario() {
         listarClientes();
         listarCorretores();
         listarImoveis();
+
+        if ('Notification' in window && navigator.serviceWorker) {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('Permissão para notificações concedida!');
+                } else {
+                    console.log('Permissão para notificações negada!');
+                }
+            });
+        }
     }, []);
+
+    // service-worker.js
+    self.addEventListener('push', event => {
+        const data = event.data.json();
+        const options = {
+            body: data.body,
+            icon: 'icon.png', // ícone da notificação
+            badge: 'badge.png',
+        };
+
+        event.waitUntil(
+            self.registration.showNotification(data.title, options)
+        );
+    });
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker registrado:', registration);
+                })
+                .catch(error => {
+                    console.log('Falha ao registrar o Service Worker:', error);
+                });
+        }
+    }, []);
+
+    useEffect(() => {
+        // Função que verifica e envia notificações
+        const verificarAgendamentosPendentes = () => {
+            const agendamentosPendentes = listaAgendamentos.filter(agendamento => agendamento.aceito === null);
+            if (agendamentosPendentes.length > 0) {
+                // Envia a notificação para o usuário
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification("Há agendamentos pendentes para confirmação!", {
+                        body: `Você tem ${agendamentosPendentes.length} agendamento(s) aguardando confirmação.`,
+                        icon: 'icon.png',
+                    });
+                }
+            }
+        };
+
+        verificarAgendamentosPendentes();
+    }, [listaAgendamentos]);
+
 
     // Função para filtrar os agendamentos
     const agendamentosFiltrados = listaAgendamentos.filter(value => {

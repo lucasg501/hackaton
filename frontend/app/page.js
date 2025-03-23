@@ -155,6 +155,28 @@ export default function Home({ children }) {
     }
 
     useEffect(() => {
+        const style = document.createElement("style");
+        style.innerHTML = `
+            @keyframes borderAnimation {
+                0% { filter: hue-rotate(0deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+            .rainbow-border {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 270px;
+                height: 270px;
+                border-radius: 50%;
+                border: 25px solid transparent;
+                animation: borderAnimation 3s linear infinite;
+                background-image: linear-gradient(white, white), 
+                                  linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+                background-origin: border-box;
+                background-clip: content-box, border-box;
+            }
+        `;
+        document.head.appendChild(style);
         listarConfig();
     }, []);
 
@@ -181,11 +203,13 @@ export default function Home({ children }) {
                                                 Agende sua visita
                                             </button>
                                             :
-                                            <button disabled={true}
-                                                className="btn btn-danger btn-lg px-4 me-sm-3"
-                                                onClick={listarDisponibilidade}>
-                                                Não vai dar não
-                                            </button>
+                                            <div className="rainbow-border">
+                                                <img
+                                                    src="https://pbs.twimg.com/media/E_-yM2JVUAoI0WU.jpg"
+                                                    alt="Imagem"
+                                                    style={{ width: 250, height: 250, borderRadius: "100%", padding: 20 }}
+                                                />
+                                            </div>
                                     }
                                 </div>
                             </div>
@@ -220,10 +244,15 @@ export default function Home({ children }) {
                                             const dataDisponibilidade = new Date(partesData[2], partesData[1] - 1, partesData[0]); // Ano, Mês (base 0), Dia
 
                                             const hoje = new Date();
-                                            hoje.setHours(0, 0, 0, 0);
-                                            dataDisponibilidade.setHours(0, 0, 0, 0);
+                                            hoje.setSeconds(0);
+                                            hoje.setMilliseconds(0);
 
-                                            const dataPassou = dataDisponibilidade < hoje;
+                                            // Extrair a hora da disponibilidade e configurá-la na data
+                                            const [hora, minuto] = value.hora.split(":");
+                                            const dataHoraDisponibilidade = new Date(dataDisponibilidade);
+                                            dataHoraDisponibilidade.setHours(hora, minuto, 0, 0); // Ajustar para a hora da disponibilidade
+
+                                            const dataPassou = dataHoraDisponibilidade < hoje;
 
                                             return (
                                                 <tr key={index}>
@@ -239,13 +268,11 @@ export default function Home({ children }) {
                                                         >
                                                             Agendar
                                                         </button>
-
                                                     </td>
                                                 </tr>
                                             );
                                         })}
                                     </tbody>
-
                                 </table>
                             </div>
                             <div className="modal-footer">
