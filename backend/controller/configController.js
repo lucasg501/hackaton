@@ -8,7 +8,6 @@ class configController{
             
             configModel.idConfig = 0;
             configModel.ativo = req.body.statusAtivo;
-            configModel.modo = req.body.modo;
             configModel.idCorretor = req.body.idCorretor;
             let ok = await configModel.gravar();
             if(ok){

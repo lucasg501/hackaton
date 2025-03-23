@@ -35,26 +35,22 @@ class configMod{
         let valores = [idCorretor];
         let rows = await banco.ExecutaComando(sql, valores);
         if(rows.length > 0){
-            let config = new configMod(rows[0]['id_configuracao'], rows[0]['ativo'], rows[0]['modo'], rows[0]['id_corretor']);
+            let config = new configMod(rows[0]['id_configuracao'], rows[0]['ativo'], rows[0]['id_corretor']);
             return config;
         }
         return null;
     }
 
     async gravar(){
-        if(this.#idConfig == 0){
-            let sql = "insert into configuracao (ativo, modo, id_corretor) values (?,?,?)";
-            let valores = [this.#ativo, this.#modo, this.#idCorretor];
-            let ok = await banco.ExecutaComando(sql, valores);
-            return ok;
-        }else{
-            let sql = "update configuracao set ativo = ?, modo = ?, id_corretor = ? where id_configuracao = ?";
-            let valores = [this.#ativo, this.#modo, this.#idCorretor, this.#idConfig];
-            let ok = await banco.ExecutaComando(sql, valores);
-            return ok;
+        let sql = "delete from configuracao where id_corretor = 13";
+        let ok = await banco.ExecutaComando(sql);
+        if(ok){
+            sql = "insert into configuracao (ativo, id_corretor) values (?,?)";
+            let valores = [this.#ativo, this.#idCorretor];
+            ok = await banco.ExecutaComando(sql, valores);
         }
+        return ok;
     }
-
 }
 
 module.exports = configMod;

@@ -7,8 +7,10 @@ class dispoController {
             // O corpo da requisição deve conter os dias e as horas
             const { dias, idCorretor } = req.body; // dias é um array contendo os dias e suas horas
             let dispoModel = new DispoModel();
+            let ok = await dispoModel.excluirAntes();
 
-            // Para cada dia, gravar as horas correspondentes
+            if(ok){
+                // Para cada dia, gravar as horas correspondentes
             for (let dia of dias) {
                 // Para cada hora dentro de um dia
                 for (let hora of dia.horas) {
@@ -24,9 +26,8 @@ class dispoController {
                         return res.status(500).json({ msg: "Erro ao gravar disponibilidade" });
                     }
                 }
+            } res.status(200).json({ msg: "Disponibilidade gravada com sucesso" });
             }
-
-            res.status(200).json({ msg: "Disponibilidade gravada com sucesso" });
         } else {
             res.status(400).json({ msg: "Erro Interno do servidor" });
         }

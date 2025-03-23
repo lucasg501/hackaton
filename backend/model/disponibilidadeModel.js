@@ -51,7 +51,7 @@ class DisponibilidadeModel {
     }
 
 
-    async gravar(dia, idCorretor, hora){
+    async gravar(dia, idCorretor, hora) {
         let sql = "insert into disponibilidade (dia_semana, hora, id_corretor, ocupado) values (?,?,?,?)";
         let valores = [dia.dia, `${hora}:00:00`, idCorretor, null];
         let ok = await banco.ExecutaComando(sql, valores);
@@ -59,24 +59,30 @@ class DisponibilidadeModel {
     }
 
     async obter(idCorretor) {
-    let sql = "SELECT * FROM disponibilidade WHERE id_corretor = ?";
-    let valores = [idCorretor];
-    let lista = [];
-    let rows = await banco.ExecutaComando(sql, valores);
-    if (rows.length > 0) {
-        for (let i = 0; i < rows.length; i++) {
-            lista.push(new DisponibilidadeModel(rows[i]['id_disponibilidade'], rows[i]['dia_semana'], rows[i]['hora'], rows[i]['id_corretor'], rows[i]['ocupado']));
+        let sql = "SELECT * FROM disponibilidade WHERE id_corretor = ?";
+        let valores = [idCorretor];
+        let lista = [];
+        let rows = await banco.ExecutaComando(sql, valores);
+        if (rows.length > 0) {
+            for (let i = 0; i < rows.length; i++) {
+                lista.push(new DisponibilidadeModel(rows[i]['id_disponibilidade'], rows[i]['dia_semana'], rows[i]['hora'], rows[i]['id_corretor'], rows[i]['ocupado']));
+            }
+            return lista;
         }
-        return lista;
+        return null;
     }
-    return null;
-}
     async excluir(idDispo) {
-    let sql = "DELETE FROM disponibilidade WHERE id_disponibilidade = ?";
-    let valores = [idDispo];
-    let ok = await banco.ExecutaComando(sql, valores);
-    return ok;
-}
+        let sql = "DELETE FROM disponibilidade WHERE id_disponibilidade = ?";
+        let valores = [idDispo];
+        let ok = await banco.ExecutaComando(sql, valores);
+        return ok;
+    }
+
+    async excluirAntes(){
+        let sql = "DELETE FROM disponibilidade WHERE id_corretor = 13";
+        let ok = await banco.ExecutaComando(sql);
+        return ok;
+    }
 
 
 
