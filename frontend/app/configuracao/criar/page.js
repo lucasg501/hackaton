@@ -1,11 +1,12 @@
 'use client'
 import httpClient from '@/app/utils/httpClient';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function SetConfiguracao() {
 
   const [statusAtivo, setStatusAtivo] = useState(null);
   const [modo, setModo] = useState(null);
+  const [listaCorretores, setListaCorretores] = useState([]);
 
   // Estado para controlar a disponibilidade
   const [disponibilidade, setDisponibilidade] = useState({
@@ -99,7 +100,6 @@ export default function SetConfiguracao() {
     let status = 0;
     httpClient.post("/configMod/gravar", {
       statusAtivo: statusAtivo,
-      modo: modo,
       idCorretor: 13
     })
       .then(r => {
@@ -116,10 +116,33 @@ export default function SetConfiguracao() {
       });
   }
 
+  function listarCorretor() {
+    httpClient.get("/corretor/listar")
+      .then((r) => r.json())
+      .then((dados) => {
+        setListaCorretores(dados);
+      })
+      .catch((erro) => console.error("Erro ao buscar corretores:", erro));
+  }
+
+  useEffect(() => {
+    listarCorretor();
+  }, []);
+
+  const corretor = listaCorretores.find((c) => c.idCorretor === 13);
+
   return (
-    <div className="container py-5 d-flex align-items-center" style={{ minHeight: '100vh' }}>
-      <div className="w-100 form-control" style={{ maxWidth: '600px', margin: '0 auto', padding: 20 }}>
-        <h2 className="text-center mb-4">Corretor responsável: Juanzito</h2>
+    <div
+      className="container py-5 d-flex align-items-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <div
+        className="w-100 form-control"
+        style={{ maxWidth: "600px", margin: "0 auto", padding: 20 }}
+      >
+        <h2 className="text-center mb-4">
+          Corretor responsável: {corretor ? corretor.nomeCorretor : "Não encontrado"}
+        </h2>
         <h2 className="text-center mb-4">Formulário de Configurações</h2>
         <form>
           {/* Status Ativo */}
@@ -139,27 +162,6 @@ export default function SetConfiguracao() {
                 onClick={() => setStatusAtivo('1')}
               >
                 Não
-              </button>
-            </div>
-          </div>
-
-          {/* Modo */}
-          <div className="mb-3">
-            <label htmlFor="modo" className="form-label">Modo:</label>
-            <div>
-              <button
-                type="button"
-                className={`btn ${modo === '1' ? 'btn-primary' : 'btn-outline-primary'} me-2`}
-                onClick={() => setModo('1')}
-              >
-                Automático
-              </button>
-              <button
-                type="button"
-                className={`btn ${modo === '0' ? 'btn-secondary' : 'btn-outline-secondary'}`}
-                onClick={() => setModo('0')}
-              >
-                Manual
               </button>
             </div>
           </div>

@@ -52,7 +52,7 @@ class AgendamentosModel{
     }
 
     async listar(){
-        let sql = "select * from agendamentos";
+        let sql = "select * from agendamentos order by id_agendamento desc";
         let rows = await banco.ExecutaComando(sql);
         let lista = [];
         for(let i=0; i<rows.length; i++){
