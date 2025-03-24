@@ -95,12 +95,12 @@ export default function Home({ children }) {
                     // Criando a data correta no formato yyyy-MM-dd HH:mm:ss
                     const partesData = selectedSchedule.data.split("/"); // Supondo "DD/MM/AAAA"
                     const dataFormatada = `${partesData[2]}-${partesData[1]}-${partesData[0]}`; // Convertendo para "AAAA-MM-DD"
-                    const dataHoraAgendada = `${dataFormatada} ${selectedSchedule.hora}:00`; // Montando "YYYY-MM-DD HH:mm:ss"
+                    const dataHoraAgendada = `${dataFormatada} ${selectedSchedule.hora}`; // Montando "YYYY-MM-DD HH:mm:ss"
 
                     httpClient.post('/agendamento/gravar', {
                         idCli: id_cliente,
                         idCorretor: 13,
-                        idImovel: 1,
+                        idImovel: 2,
                         DtHr: dataHoraAgendada, // Enviando a data correta
                     })
                         .then(agendamentoResponse => {
