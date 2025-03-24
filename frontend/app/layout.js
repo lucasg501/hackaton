@@ -18,6 +18,7 @@ export default function RootLayout({ children }) {
                 <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                   <li className="nav-item"><a className="nav-link" href="/configuracao">Configurações do Módulo/CRM</a></li>
                   <li className="nav-item"><a className="nav-link" href="/">Site do cliente</a></li>
+                  <li className="nav-item"><a className="nav-link" href="/negocios">Aba de Negócios</a></li>
                 </ul>
               </div>
             </div>

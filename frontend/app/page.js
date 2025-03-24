@@ -300,7 +300,7 @@ export default function Home({ children }) {
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="telefone" className="form-label">Telefone</label>
-                                        <input ref={telCliente} type="tel" className="form-control" id="telefone" placeholder="Seu telefone" required />
+                                        <input maxLength={11} ref={telCliente} type="tel" className="form-control" id="telefone" placeholder="Seu telefone" required />
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="email" className="form-label">Email</label>

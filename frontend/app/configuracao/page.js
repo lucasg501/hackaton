@@ -145,6 +145,7 @@ export default function Formulario() {
                             <th>ID Agendamento</th>
                             <th>Nome do cliente</th>
                             <th>Email Cliente</th>
+                            <th>Telefone Cliente</th>
                             <th>Observação Cliente</th>
                             <th>Corretor responsável</th>
                             <th>Imóvel</th>
@@ -172,6 +173,7 @@ export default function Formulario() {
                                         <td>{value.idAgendamento}</td>
                                         <td>{cliente ? cliente.nomeCliente : "Desconhecido"}</td>
                                         <td>{cliente ? cliente.emailCliente : "Desconhecido"}</td>
+                                        <td>{cliente ? cliente.telCliente : "Desconhecido"}</td>
                                         <td>{cliente ? cliente.obsCliente : "Desconhecido"}</td>
                                         <td>{corretor ? corretor.nomeCorretor : "Desconhecido"}</td>
                                         <td>{imovel ? `${imovel.descImovel} (Referência: ${imovel.idImovel})` : "Desconhecido"}</td>
