@@ -1,6 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react';
 import httpClient from '../utils/httpClient';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquareWhatsapp, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 export default function Formulario() {
 
@@ -173,10 +175,16 @@ export default function Formulario() {
                                         <td>{value.idAgendamento}</td>
                                         <td>{cliente ? cliente.nomeCliente : "Desconhecido"}</td>
                                         <td>{cliente ? cliente.emailCliente : "Desconhecido"}</td>
-                                        <td>{cliente ? cliente.telCliente : "Desconhecido"}</td>
+                                        <td>
+                                            <span>{cliente ? cliente.telCliente : "Desconhecido"}</span>
+                                            <a href={`https://wa.me/+55${cliente?.telCliente}`} target="_blank" rel="noopener noreferrer" style={{ marginLeft: "15px" }}>
+                                                <FontAwesomeIcon icon={faWhatsapp} style={{ color: "green", height: 25 }} />
+                                            </a>
+                                        </td>
+
                                         <td>{cliente ? cliente.obsCliente : "Desconhecido"}</td>
                                         <td>{corretor ? corretor.nomeCorretor : "Desconhecido"}</td>
-                                        <td>{imovel ? `${imovel.descImovel} (Referência: ${imovel.idImovel})` : "Desconhecido"}</td>
+                                        <td style={{ maxWidth: '200px', overflow: 'hidden' }}>{imovel ? `${imovel.descImovel} (Referência: ${imovel.idImovel})` : "Desconhecido"}</td>
                                         <td>{data}</td>
                                         <td>{hora}</td>
                                         <td>
